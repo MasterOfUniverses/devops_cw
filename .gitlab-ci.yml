@@ -8,7 +8,8 @@ test:
     - source venv/bin/activate
     - pip install -r req.txt
     - python3 tests/append_paths.py
-  test_script:
+
+  script:
     - pytest
     - flake8 .
     - mypy .
@@ -19,8 +20,8 @@ build:
     DOCKER_TLS_CERTDIR: ""
     SSHPASS: $SSHPASS
   services:
-    name: docker:20.10.16-dind
-    command: ["dockerd", "--host=tcp://0.0.0.0:2376"]
+    - name: docker:20.10.16-dind
+      command: ["dockerd", "--host=tcp://0.0.0.0:2376"]
   script:
     - docker build --network=host -f Dockerfile -t bvt2202_chekalov_docker .
     - docker save bvt2202_chekalov_docker:latest > bvt2202_chekalov.tar
