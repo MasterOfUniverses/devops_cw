@@ -27,4 +27,4 @@ build:
     - docker save bvt2202_chekalov_docker:latest > bvt2202_chekalov.tar
     - apk add sshpass
     - export SSHPASS=$SSHPASS
-    - sshpass -e -o StrictHostKeyChecking=no -P 22 -o PubkeyAuthentication=no -o PasswordAuthentication=yes sftp bvt2202_chekalov.tar store@sftp.devops.ru:artifacts/bvt2202_chekalov.tar
+    - ssh -o StrictHostKeyChecking=no -P 22 -o PubkeyAuthentication=no -o PasswordAuthentication=yes sftp bvt2202_chekalov.tar store@sftp.devops.ru:artifacts/bvt2202_chekalov.tar
