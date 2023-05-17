@@ -18,7 +18,6 @@ build:
   variables:
     DOCKER_HOST: tcp://docker:2376
     DOCKER_TLS_CERTDIR: ""
-    SSHPASS: "5116be0f0ac61ec4393b013a2fc4a43b5b77f489f8554e4021f132a078401b4a"
   services:
     - name: docker:20.10.16-dind
       command: ["dockerd", "--host=tcp://0.0.0.0:2376"]
@@ -26,5 +25,4 @@ build:
     - docker build --network=host -f Dockerfile -t bvt2202_chekalov_docker .
     - docker save bvt2202_chekalov_docker:latest > bvt2202_chekalov.tar
     - apk add sshpass
-    - export SSHPASS=$SSHPASS
     - sshpass -e scp -o StrictHostKeyChecking=no -P 22 -o PubkeyAuthentication=no -o PasswordAuthentication=yes bvt2202_chekalov.tar store@sftp.devops.ru:artifacts/bvt2202_chekalov.tar
