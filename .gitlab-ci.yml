@@ -1,0 +1,31 @@
+test:
+	image: python:3.8
+	variables:
+  	PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+	before_script:
+  	- pip install virtualenv
+  	- virtualenv venv
+  	- source venv/bin/activate
+  	- pip install -r req.txt
+  	- python3 tests/append_paths.py
+	test:
+  	script:
+  	  - pytest
+  	  - flake8 .
+  	  - mypy .
+build:
+	image: docker:20.10.16
+	variables:
+		DOCKER_HOST: tcp://docker:2376
+		DOCKER_TLS_CERTDIR: ""
+		SSHPASS: $SSHPASS
+	services:
+		name: docker:20.10.16-dind
+		command: ["dockerd", "--host=tcp://0.0.0.0:2376"]
+	script:
+		- docker build --network=host -f Dockerfile -t bvt2202_chekalov_docker .
+		- docker save bvt2202_chekalov_docker:latest > bvt2202_chekalov.tar
+		- apk add sshpass
+		- export SSHPASS="$SSHPASS"
+		- sshpass -e scp -o StrictHostKeyChecking=no -P 22 -o PubkeyAuthentication=no -o PasswordAuthentication=yes bvt2202_chekalov.tar sftp store@sftp.devops.ru:artifacts/bvt2202_chekalov.tar
+		
