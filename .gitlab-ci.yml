@@ -1,15 +1,14 @@
 test:
     image: python:3.8
     variables:
-      PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+        PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
     before_script:
-      - pip install virtualenv
-      - virtualenv venv
-      - source venv/bin/activate
-      - pip install -r req.txt
-      - python3 tests/append_paths.py
-    test:
-      script:
+        - pip install virtualenv
+        - virtualenv venv
+        - source venv/bin/activate
+        - pip install -r req.txt
+        - python3 tests/append_paths.py
+    test_script:
         - pytest
         - flake8 .
         - mypy .
